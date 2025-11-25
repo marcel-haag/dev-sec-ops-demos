@@ -1,0 +1,6 @@
+function proxyRequest(msg) {
+    var cookieHeader = "token=eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJzdGF0dXMiOiJzdWNjZXNzIiwiZGF0YSI6eyJpZCI6MSwidXNlcm5hbWUiOiIiLCJlbWFpbCI6ImFkbWluQGp1aWNlLXNoLm9wIiwicGFzc3dvcmQiOiIwMTkyMDIzYTdiYmQ3MzI1MDUxNmYwNjlkZjE4YjUwMCIsInJvbGUiOiJhZG1pbiIsImRlbHV4ZVRva2VuIjoiIiwibGFzdExvZ2luSXAiOiIiLCJwcm9maWxlSW1hZ2UiOiJhc3NldHMvcHVibGljL2ltYWdlcy91cGxvYWRzL2RlZmF1bHRBZG1pbi5wbmciLCJ0b3RwU2VjcmV0IjoiIiwiaXNBY3RpdmUiOnRydWUsImNyZWF0ZWRBdCI6IjIwMjUtMTEtMjQgMjE6NTk6MzkuMDcyICswMDowMCIsInVwZGF0ZWRBdCI6IjIwMjUtMTEtMjQgMjE6NTk6MzkuMDcyICswMDowMCIsImRlbGV0ZWRBdCI6bnVsbH0sImlhdCI6MTc2NDA3MTYyOH0.YuJVeJju_0MlQNJ4Sbwxryav-HDMgm3CWMOHoF8R5XxTZv7PyWpuLr_M45h7wUGhwjfQTgEqbQNjfSWPEcJFADV47fXXp-YqFIQBpT3VRiH_6abpwxMGaGXLehWgG1gzP1oAgTX7ykwN_b1XZMz4xK7Uh2sYDogevA-5vspW5VI; Path=/; Domain=saftladen.automatisier.bar;" +
+                       "continueCode=vLeVxlRzkNb47vKDPMo5Lq8wdzVtvfkDuejdjn6EZm2ygrX19BpaQWOJY3oM; Path=/; Domain=saftladen.automatisier.bar;";
+    
+    msg.getRequestHeader().setHeader("Cookie", cookieHeader);
+}

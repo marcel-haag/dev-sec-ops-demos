@@ -1,0 +1,780 @@
+{
+  "type": "collection.insomnia.rest/5.0",
+  "schema_version": "5.1",
+  "name": "JuiceShop",
+  "meta": {
+    "id": "wrk_f1b44a5a4b044db990b8f26e17246ecf",
+    "created": 1764070742095,
+    "modified": 1764070742095,
+    "description": ""
+  },
+  "collection": [
+    {
+      "name": "juice-shop",
+      "meta": {
+        "id": "fld_a88723a93fa84484a6445bee2d4a1c2f",
+        "created": 1764021316761,
+        "modified": 1764073774797,
+        "sortKey": -1764021315001,
+        "description": "URL: awesome OWASP Juice shop  \n[https://juice-shop.herokuapp.com/](https://juice-shop.herokuapp.com/)  \nFind the APIs endpoints and test the following scenarios:\n\nQ1: Sign in the user, add 1 item to the basket, and verify that 1 item is in the basket  \nQ2: Same as the previous scenario but add 2 items instead of 1 to the basket  \nQ3: Same as the previous scenario but delete 1 item and validate that only 1 item remains in the basket"
+      },
+      "children": [
+        {
+          "name": "Add 1 item to the basket and verify it in the basket",
+          "meta": {
+            "id": "fld_08cf666848074527a22082e1764f8144",
+            "created": 1764021316761,
+            "modified": 1764073774797,
+            "sortKey": -1764021315000,
+            "description": ""
+          },
+          "children": [
+            {
+              "url": "https://saftladen.automatisier.bar/api/Users/",
+              "name": "createNewUser",
+              "meta": {
+                "id": "req_b0c7c80f8c9e48ad8136dd55e0adb849",
+                "created": 1764021316762,
+                "modified": 1764073780178,
+                "isPrivate": false,
+                "description": "",
+                "sortKey": -1764021314999
+              },
+              "method": "POST",
+              "body": {
+                "mimeType": "text/plain",
+                "text": "{\"email\":\"{{_['_email']}}\",\"password\":\"{{_['_password']}}\",\"passwordRepeat\":\"{{_['_password']}}\",\"securityQuestion\":{\"id\":7,\"question\":\"Name of your favorite pet?\",\"createdAt\":\"2022-05-20T17:09:53.991Z\",\"updatedAt\":\"2022-05-20T17:09:53.991Z\"},\"securityAnswer\":\"MIX MIX\"}"
+              },
+              "headers": [
+                {
+                  "name": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "scripts": {
+                "preRequest": "/* Prepare data for the create new user API\n    Author: Marcel Haag\n    Issue date: Sat 21 May, 2022\n*/\n\n//Clear all your environment values\ninsomnia.environment.clear()\n\n//Generate the random email and password and save it into the environment variable\ninsomnia.environment.set(\"_email\", insomnia.variables.replaceIn('{{$randomEmail}}'));\ninsomnia.environment.set(\"_password\", insomnia.variables.replaceIn('{{$randomPassword}}'));\n\n\n",
+                "afterResponse": "/* Test the create new user API\n    Author: Marcel Haag\n    Issue date: Sat 21 May, 2022\n*/\n\n//Successful to create new user with status code is 201\ninsomnia.test(\"Successful to create new user with status code is 201\", function () {\n    insomnia.response.to.have.status(201);\n});\n\nvar jsonData = JSON.parse(insomnia.response.text());\n//Verify that the new user is create with the correct email\ninsomnia.test(\"TVerify that the new user is create with the correct email\", function () {\n    insomnia.expect(jsonData.data.email).is.equal(insomnia.environment.get(\"_email\"));\n});"
+              },
+              "settings": {
+                "renderRequestBody": true,
+                "encodeUrl": true,
+                "followRedirects": "global",
+                "cookies": {
+                  "send": true,
+                  "store": true
+                },
+                "rebuildPath": true
+              }
+            },
+            {
+              "url": "https://saftladen.automatisier.bar/rest/basket/{{_['_bid']}}",
+              "name": "Verify1ItemInBasket",
+              "meta": {
+                "id": "req_66b617bd51294d188b6026a1416e910a",
+                "created": 1764021316763,
+                "modified": 1764073795555,
+                "isPrivate": false,
+                "description": "",
+                "sortKey": -1764021314995
+              },
+              "method": "GET",
+              "headers": [
+                {
+                  "name": "Authorization",
+                  "value": "{{_token}}"
+                }
+              ],
+              "scripts": {
+                "afterResponse": "/* Test the get basket item API\n    Author: Marcel Haag\n    Issue date: Sat 21 May, 2022\n*/\n\n//Successful to get the basket item with status code is 200\ninsomnia.test(\"Successful to get the basket item with status code is 200\", function () {\n    insomnia.response.to.have.status(200);\n});\n\nvar jsonData = JSON.parse(insomnia.response.text());\n//Verify that the user basket have 1 item with the correct item name\ninsomnia.test(\"The user basket has 1 item with the correct item name\", function () {\n    insomnia.expect(jsonData.data.Products.length).is.equal(1);\n});\n//Verify that the user basket have 1 item with the correct item name\ninsomnia.test(\"The item in user basket has the correct item id and item name\", function () {\n    insomnia.expect(jsonData.data.Products[0].id).is.equal(Number(insomnia.environment.get(\"_product_1_id\")));\n    insomnia.expect(jsonData.data.Products[0].name).is.equal(insomnia.environment.get(\"_product_1_name\"));\n});"
+              },
+              "settings": {
+                "renderRequestBody": true,
+                "encodeUrl": true,
+                "followRedirects": "global",
+                "cookies": {
+                  "send": true,
+                  "store": true
+                },
+                "rebuildPath": true
+              }
+            },
+            {
+              "url": "https://saftladen.automatisier.bar/rest/products/search",
+              "name": "getAllProduct",
+              "meta": {
+                "id": "req_899089195e0d4587adeab104d1853b70",
+                "created": 1764021316763,
+                "modified": 1764073786463,
+                "isPrivate": false,
+                "description": "",
+                "sortKey": -1764021314997
+              },
+              "method": "GET",
+              "parameters": [
+                {
+                  "name": "q",
+                  "value": "",
+                  "disabled": false
+                }
+              ],
+              "headers": [
+                {
+                  "name": "Authorization",
+                  "value": "{{_token}}"
+                }
+              ],
+              "scripts": {
+                "afterResponse": "/* Test for the search API\n    Author: Marcel Haag\n    Issue date: Sat 21 May, 2022\n*/\n\n//Successful to get all product with status code is 200\ninsomnia.test(\"Successful to get all product with status code is 200\", function () {\n    insomnia.response.to.have.status(200);\n});\n\n//Get and save the id and name of the first product item \nvar jsonData = JSON.parse(insomnia.response.text());\ninsomnia.environment.set(\"_product_1_id\", jsonData.data[0].id);\ninsomnia.environment.set(\"_product_1_name\", jsonData.data[0].name);\n"
+              },
+              "settings": {
+                "renderRequestBody": true,
+                "encodeUrl": true,
+                "followRedirects": "global",
+                "cookies": {
+                  "send": true,
+                  "store": true
+                },
+                "rebuildPath": true
+              }
+            },
+            {
+              "url": "https://saftladen.automatisier.bar/rest/user/login",
+              "name": "login",
+              "meta": {
+                "id": "req_8c90a7f16e2841dab66e8f042b7fca0d",
+                "created": 1764021316763,
+                "modified": 1764073772564,
+                "isPrivate": false,
+                "description": "",
+                "sortKey": -1764021314998
+              },
+              "method": "POST",
+              "body": {
+                "mimeType": "text/plain",
+                "text": "{\"email\":\"admin@juice-sh.op\",\"password\":\"admin123\"}"
+              },
+              "headers": [
+                {
+                  "name": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "scripts": {
+                "afterResponse": "/* Test the login API\n    Author: Marcel Haag\n    Issue date: Sat 21 May, 2022\n*/\n\n//Successful to login with status code is 200\ninsomnia.test(\"Successful to login with status code is 200\", function () {\n    insomnia.response.to.have.status(200);\n});\n\n\nvar jsonData = JSON.parse(insomnia.response.text());\n//Get and save the token to the environment variable\ninsomnia.environment.set(\"_token\", \"Bearer \" + jsonData.authentication.token);\n//Get and save the basketID to the environment variable\ninsomnia.environment.set(\"_bid\", jsonData.authentication.bid);\n"
+              },
+              "settings": {
+                "renderRequestBody": true,
+                "encodeUrl": true,
+                "followRedirects": "global",
+                "cookies": {
+                  "send": true,
+                  "store": true
+                },
+                "rebuildPath": true
+              }
+            },
+            {
+              "url": "https://saftladen.automatisier.bar/api/BasketItems/",
+              "name": "Add1ItemToBasket",
+              "meta": {
+                "id": "req_b09f9d0676f4413f94c44e79cc7a905f",
+                "created": 1764021316763,
+                "modified": 1764073790812,
+                "isPrivate": false,
+                "description": "",
+                "sortKey": -1764021314996
+              },
+              "method": "POST",
+              "body": {
+                "mimeType": "text/plain",
+                "text": "{\"ProductId\":{{_product_1_id}},\"BasketId\":\"{{_bid}}\",\"quantity\":1}"
+              },
+              "headers": [
+                {
+                  "name": "Authorization",
+                  "value": "{{_token}}"
+                },
+                {
+                  "name": "Content-Type",
+                  "value": "application/json; charset=utf-8"
+                }
+              ],
+              "scripts": {
+                "afterResponse": "/* test the add item to basket API\n    Author: Marcel Haag\n    Issue date: Sat 21 May, 2022\n*/\n\n//Successful to add item to basket with status code is 200\ninsomnia.test(\"Successful to sadd item to basket with status code is 200\", function () {\n    insomnia.response.to.have.status(200);\n});"
+              },
+              "settings": {
+                "renderRequestBody": true,
+                "encodeUrl": true,
+                "followRedirects": "global",
+                "cookies": {
+                  "send": true,
+                  "store": true
+                },
+                "rebuildPath": true
+              }
+            }
+          ]
+        },
+        {
+          "name": "Add 2 items to the basket and verify it in the basket",
+          "meta": {
+            "id": "fld_5427fefda6aa4a0680839c90971e107b",
+            "created": 1764021316764,
+            "modified": 1764021316764,
+            "sortKey": -1764021314994,
+            "description": ""
+          },
+          "children": [
+            {
+              "url": "https://saftladen.automatisier.bar/api/Users/",
+              "name": "createNewUser",
+              "meta": {
+                "id": "req_50a401921be444259bd6b0c90a42f1d2",
+                "created": 1764021316764,
+                "modified": 1764073800354,
+                "isPrivate": false,
+                "description": "",
+                "sortKey": -1764021314993
+              },
+              "method": "POST",
+              "body": {
+                "mimeType": "text/plain",
+                "text": "{\"email\":\"{{_['_email']}}\",\"password\":\"{{_['_password']}}\",\"passwordRepeat\":\"{{_['_password']}}\",\"securityQuestion\":{\"id\":7,\"question\":\"Name of your favorite pet?\",\"createdAt\":\"2022-05-20T17:09:53.991Z\",\"updatedAt\":\"2022-05-20T17:09:53.991Z\"},\"securityAnswer\":\"MIX MIX\"}"
+              },
+              "headers": [
+                {
+                  "name": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "scripts": {
+                "preRequest": "/* Prepare data for the create new user API\n    Author: Marcel Haag\n    Issue date: Sat 21 May, 2022\n*/\n\n//Clear all your environment values\ninsomnia.environment.clear()\n\n//Generate the random email and password and save it into the environment variable\ninsomnia.environment.set(\"_email\", insomnia.variables.replaceIn('{{$randomEmail}}'));\ninsomnia.environment.set(\"_password\", insomnia.variables.replaceIn('{{$randomPassword}}'));\n\n\n",
+                "afterResponse": "/* Test the create new user API\n    Author: Marcel Haag\n    Issue date: Sat 21 May, 2022\n*/\n\n//Successful to create new user with status code is 201\ninsomnia.test(\"Successful to create new user with status code is 201\", function () {\n    insomnia.response.to.have.status(201);\n});\n\nvar jsonData = JSON.parse(insomnia.response.text());\n//Verify that the new user is create with the correct email\ninsomnia.test(\"TVerify that the new user is create with the correct email\", function () {\n    insomnia.expect(jsonData.data.email).is.equal(insomnia.environment.get(\"_email\"));\n});"
+              },
+              "settings": {
+                "renderRequestBody": true,
+                "encodeUrl": true,
+                "followRedirects": "global",
+                "cookies": {
+                  "send": true,
+                  "store": true
+                },
+                "rebuildPath": true
+              }
+            },
+            {
+              "url": "https://saftladen.automatisier.bar/rest/user/login",
+              "name": "login",
+              "meta": {
+                "id": "req_57f5f6220b9041c8a715b3841240d65a",
+                "created": 1764021316764,
+                "modified": 1764073804960,
+                "isPrivate": false,
+                "description": "",
+                "sortKey": -1764021314992
+              },
+              "method": "POST",
+              "body": {
+                "mimeType": "text/plain",
+                "text": "{\"email\":\"{{_email}}\",\"password\":\"{{_password}}\"}"
+              },
+              "headers": [
+                {
+                  "name": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "scripts": {
+                "afterResponse": "/* Test the login API\n    Author: Marcel Haag\n    Issue date: Sat 21 May, 2022\n*/\n\n//Successful to login with status code is 200\ninsomnia.test(\"Successful to login with status code is 200\", function () {\n    insomnia.response.to.have.status(200);\n});\n\n\nvar jsonData = JSON.parse(insomnia.response.text());\n//Get and save the token to the environment variable\ninsomnia.environment.set(\"_token\", \"Bearer \" + jsonData.authentication.token);\n//Get and save the basketID to the environment variable\ninsomnia.environment.set(\"_bid\", jsonData.authentication.bid);\n"
+              },
+              "settings": {
+                "renderRequestBody": true,
+                "encodeUrl": true,
+                "followRedirects": "global",
+                "cookies": {
+                  "send": true,
+                  "store": true
+                },
+                "rebuildPath": true
+              }
+            },
+            {
+              "url": "https://saftladen.automatisier.bar/rest/basket/{{_['_bid']}}",
+              "name": "Verify2ItemsInBasket",
+              "meta": {
+                "id": "req_1b5d98f869c24d61ade97f10e39ad453",
+                "created": 1764021316765,
+                "modified": 1764073824885,
+                "isPrivate": false,
+                "description": "",
+                "sortKey": -1764021314988
+              },
+              "method": "GET",
+              "headers": [
+                {
+                  "name": "Authorization",
+                  "value": "{{_token}}"
+                }
+              ],
+              "scripts": {
+                "afterResponse": "/* Test the get basket item API\n    Author: Marcel Haag\n    Issue date: Sat 21 May, 2022\n*/\n\n//Successful to get the basket item with status code is 200\ninsomnia.test(\"Successful to get the basket item with status code is 200\", function () {\n    insomnia.response.to.have.status(200);\n});\n\nvar jsonData = JSON.parse(insomnia.response.text());\n//Verify that the user basket have 2 items with the correct item name\ninsomnia.test(\"Verify that the user basket have 2 items with the correct item name\", function () {\n    insomnia.expect(jsonData.data.Products.length).is.equal(2);\n});\n\n//Verify that the first item in basket has the correct item id and name\ninsomnia.test(\"Verify that the first item in basket has the correct item id and name\", function () {\n    insomnia.expect(jsonData.data.Products[0].id).is.equal(Number(insomnia.environment.get(\"_product_1_id\")));\n    insomnia.expect(jsonData.data.Products[0].name).is.equal(insomnia.environment.get(\"_product_1_name\"));\n});\n\n//Verify that the second item in basket has the correct item id and name\ninsomnia.test(\"Verify that the second item in basket has the correct item id and name\", function () {\n    insomnia.expect(jsonData.data.Products[1].id).is.equal(Number(insomnia.environment.get(\"_product_2_id\")));\n    insomnia.expect(jsonData.data.Products[1].name).is.equal(insomnia.environment.get(\"_product_2_name\"));\n});"
+              },
+              "settings": {
+                "renderRequestBody": true,
+                "encodeUrl": true,
+                "followRedirects": "global",
+                "cookies": {
+                  "send": true,
+                  "store": true
+                },
+                "rebuildPath": true
+              }
+            },
+            {
+              "url": "https://saftladen.automatisier.bar/api/BasketItems/",
+              "name": "AddSecondItemToBasket",
+              "meta": {
+                "id": "req_624154b4c20f4641840b71c1a455de7b",
+                "created": 1764021316765,
+                "modified": 1764073819615,
+                "isPrivate": false,
+                "description": "",
+                "sortKey": -1764021314989
+              },
+              "method": "POST",
+              "body": {
+                "mimeType": "text/plain",
+                "text": "{\"ProductId\":{{_product_2_id}},\"BasketId\":\"{{_bid}}\",\"quantity\":1}"
+              },
+              "headers": [
+                {
+                  "name": "Authorization",
+                  "value": "{{_token}}"
+                },
+                {
+                  "name": "Content-Type",
+                  "value": "application/json; charset=utf-8"
+                }
+              ],
+              "scripts": {
+                "afterResponse": "/* test the add item to basket API\n    Author: Marcel Haag\n    Issue date: Sat 21 May, 2022\n*/\n\n//Successful to add the second item to basket with status code is 200\ninsomnia.test(\"Successful to add the second item to basket with status code is 200\", function () {\n    insomnia.response.to.have.status(200);\n});"
+              },
+              "settings": {
+                "renderRequestBody": true,
+                "encodeUrl": true,
+                "followRedirects": "global",
+                "cookies": {
+                  "send": true,
+                  "store": true
+                },
+                "rebuildPath": true
+              }
+            },
+            {
+              "url": "https://saftladen.automatisier.bar/rest/products/search",
+              "name": "getAllProduct",
+              "meta": {
+                "id": "req_964a25c2eaa04faa9d2ed58437618eed",
+                "created": 1764021316765,
+                "modified": 1764073809771,
+                "isPrivate": false,
+                "description": "",
+                "sortKey": -1764021314991
+              },
+              "method": "GET",
+              "parameters": [
+                {
+                  "name": "q",
+                  "value": "",
+                  "disabled": false
+                }
+              ],
+              "headers": [
+                {
+                  "name": "Authorization",
+                  "value": "{{_token}}"
+                }
+              ],
+              "scripts": {
+                "afterResponse": "/* Test for the search API\n    Author: Marcel Haag\n    Issue date: Sat 21 May, 2022\n*/\n\n//Successful to get all product with status code is 200\ninsomnia.test(\"Successful to get all product with status code is 200\", function () {\n    insomnia.response.to.have.status(200);\n});\n\n//Get and save the id and name of the first product item \nvar jsonData = JSON.parse(insomnia.response.text());\ninsomnia.environment.set(\"_product_1_id\", jsonData.data[0].id);\ninsomnia.environment.set(\"_product_1_name\", jsonData.data[0].name);\n\n//Get and save the id and name of the second product item\ninsomnia.environment.set(\"_product_2_id\", jsonData.data[1].id);\ninsomnia.environment.set(\"_product_2_name\", jsonData.data[1].name);\n"
+              },
+              "settings": {
+                "renderRequestBody": true,
+                "encodeUrl": true,
+                "followRedirects": "global",
+                "cookies": {
+                  "send": true,
+                  "store": true
+                },
+                "rebuildPath": true
+              }
+            },
+            {
+              "url": "https://saftladen.automatisier.bar/api/BasketItems/",
+              "name": "AddFirstItemToBasket",
+              "meta": {
+                "id": "req_a51576ffb2ee46428ce1351106a254b6",
+                "created": 1764021316765,
+                "modified": 1764073814450,
+                "isPrivate": false,
+                "description": "",
+                "sortKey": -1764021314990
+              },
+              "method": "POST",
+              "body": {
+                "mimeType": "text/plain",
+                "text": "{\"ProductId\":{{_product_1_id}},\"BasketId\":\"{{_bid}}\",\"quantity\":1}"
+              },
+              "headers": [
+                {
+                  "name": "Authorization",
+                  "value": "{{_token}}"
+                },
+                {
+                  "name": "Content-Type",
+                  "value": "application/json; charset=utf-8"
+                }
+              ],
+              "scripts": {
+                "afterResponse": "/* test the add item to basket API\n    Author: Marcel Haag\n    Issue date: Sat 21 May, 2022\n*/\n\n//Successful to add the first item to basket with status code is 200\ninsomnia.test(\"Successful to add the first item to basket with status code is 200\", function () {\n    insomnia.response.to.have.status(200);\n});"
+              },
+              "settings": {
+                "renderRequestBody": true,
+                "encodeUrl": true,
+                "followRedirects": "global",
+                "cookies": {
+                  "send": true,
+                  "store": true
+                },
+                "rebuildPath": true
+              }
+            }
+          ]
+        },
+        {
+          "name": "Add 2 items then delete 1 item from the basket",
+          "meta": {
+            "id": "fld_a8052a06b1f247bcb30729860c7aac90",
+            "created": 1764021316765,
+            "modified": 1764021316765,
+            "sortKey": -1764021314987,
+            "description": ""
+          },
+          "children": [
+            {
+              "url": "https://saftladen.automatisier.bar/api/Users/",
+              "name": "createNewUser",
+              "meta": {
+                "id": "req_aea9564f94ea403696f2368a1ee63d56",
+                "created": 1764021316765,
+                "modified": 1764073839304,
+                "isPrivate": false,
+                "description": "",
+                "sortKey": -1764021314986
+              },
+              "method": "POST",
+              "body": {
+                "mimeType": "text/plain",
+                "text": "{\"email\":\"{{_['_email']}}\",\"password\":\"{{_['_password']}}\",\"passwordRepeat\":\"{{_['_password']}}\",\"securityQuestion\":{\"id\":7,\"question\":\"Name of your favorite pet?\",\"createdAt\":\"2022-05-20T17:09:53.991Z\",\"updatedAt\":\"2022-05-20T17:09:53.991Z\"},\"securityAnswer\":\"MIX MIX\"}"
+              },
+              "headers": [
+                {
+                  "name": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "scripts": {
+                "preRequest": "/* Prepare data for the create new user API\n    Author: Marcel Haag\n    Issue date: Sat 21 May, 2022\n*/\n\n//Clear all your environment values\ninsomnia.environment.clear()\n\n//Generate the random email and password and save it into the environment variable\ninsomnia.environment.set(\"_email\", insomnia.variables.replaceIn('{{$randomEmail}}'));\ninsomnia.environment.set(\"_password\", insomnia.variables.replaceIn('{{$randomPassword}}'));\n\n\n",
+                "afterResponse": "/* Test the create new user API\n    Author: Marcel Haag\n    Issue date: Sat 21 May, 2022\n*/\n\n//Successful to create new user with status code is 201\ninsomnia.test(\"Successful to create new user with status code is 201\", function () {\n    insomnia.response.to.have.status(201);\n});\n\nvar jsonData = JSON.parse(insomnia.response.text());\n//Verify that the new user is create with the correct email\ninsomnia.test(\"TVerify that the new user is create with the correct email\", function () {\n    insomnia.expect(jsonData.data.email).is.equal(insomnia.environment.get(\"_email\"));\n});"
+              },
+              "settings": {
+                "renderRequestBody": true,
+                "encodeUrl": true,
+                "followRedirects": "global",
+                "cookies": {
+                  "send": true,
+                  "store": true
+                },
+                "rebuildPath": true
+              }
+            },
+            {
+              "url": "https://saftladen.automatisier.bar/rest/basket/{{_['_bid']}}",
+              "name": "Verify2ItemsInBasket",
+              "meta": {
+                "id": "req_2d109292667c48368192aaad737d1a8a",
+                "created": 1764021316766,
+                "modified": 1764073862572,
+                "isPrivate": false,
+                "description": "",
+                "sortKey": -1764021314981
+              },
+              "method": "GET",
+              "headers": [
+                {
+                  "name": "Authorization",
+                  "value": "{{_token}}"
+                }
+              ],
+              "scripts": {
+                "afterResponse": "/* Test the get basket item API\n    Author: Marcel Haag\n    Issue date: Sat 21 May, 2022\n*/\n\n//Successful to get the basket item with status code is 200\ninsomnia.test(\"Successful to get the basket item with status code is 200\", function () {\n    insomnia.response.to.have.status(200);\n});\n\nvar jsonData = JSON.parse(insomnia.response.text());\n//Verify that the user basket have 2 items with the correct item name\ninsomnia.test(\"Verify that the user basket have 2 items with the correct item name\", function () {\n    insomnia.expect(jsonData.data.Products.length).is.equal(2);\n});\n\n//Verify that the first item in basket has the correct item id and name\ninsomnia.test(\"Verify that the first item in basket has the correct item id and name\", function () {\n    insomnia.expect(jsonData.data.Products[0].id).is.equal(Number(insomnia.environment.get(\"_product_1_id\")));\n    insomnia.expect(jsonData.data.Products[0].name).is.equal(insomnia.environment.get(\"_product_1_name\"));\n});\n\n//Verify that the second item in basket has the correct item id and name\ninsomnia.test(\"Verify that the second item in basket has the correct item id and name\", function () {\n    insomnia.expect(jsonData.data.Products[1].id).is.equal(Number(insomnia.environment.get(\"_product_2_id\")));\n    insomnia.expect(jsonData.data.Products[1].name).is.equal(insomnia.environment.get(\"_product_2_name\"));\n});"
+              },
+              "settings": {
+                "renderRequestBody": true,
+                "encodeUrl": true,
+                "followRedirects": "global",
+                "cookies": {
+                  "send": true,
+                  "store": true
+                },
+                "rebuildPath": true
+              }
+            },
+            {
+              "url": "https://saftladen.automatisier.bar/rest/user/login",
+              "name": "login",
+              "meta": {
+                "id": "req_40364fad3fba40adad5ae09648ed50ed",
+                "created": 1764021316766,
+                "modified": 1764073844651,
+                "isPrivate": false,
+                "description": "",
+                "sortKey": -1764021314985
+              },
+              "method": "POST",
+              "body": {
+                "mimeType": "text/plain",
+                "text": "{\"email\":\"{{_email}}\",\"password\":\"{{_password}}\"}"
+              },
+              "headers": [
+                {
+                  "name": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "scripts": {
+                "afterResponse": "/* Test the login API\n    Author: Marcel Haag\n    Issue date: Sat 21 May, 2022\n*/\n\n//Successful to login with status code is 200\ninsomnia.test(\"Successful to login with status code is 200\", function () {\n    insomnia.response.to.have.status(200);\n});\n\n\nvar jsonData = JSON.parse(insomnia.response.text());\n//Get and save the token to the environment variable\ninsomnia.environment.set(\"_token\", \"Bearer \" + jsonData.authentication.token);\n//Get and save the basketID to the environment variable\ninsomnia.environment.set(\"_bid\", jsonData.authentication.bid);\n"
+              },
+              "settings": {
+                "renderRequestBody": true,
+                "encodeUrl": true,
+                "followRedirects": "global",
+                "cookies": {
+                  "send": true,
+                  "store": true
+                },
+                "rebuildPath": true
+              }
+            },
+            {
+              "url": "https://saftladen.automatisier.bar/api/BasketItems/",
+              "name": "AddSecondItemToBasket",
+              "meta": {
+                "id": "req_a4c4bf976ede4b7498cd1be2da24c754",
+                "created": 1764021316766,
+                "modified": 1764073857382,
+                "isPrivate": false,
+                "description": "",
+                "sortKey": -1764021314982
+              },
+              "method": "POST",
+              "body": {
+                "mimeType": "text/plain",
+                "text": "{\"ProductId\":{{_product_2_id}},\"BasketId\":\"{{_bid}}\",\"quantity\":1}"
+              },
+              "headers": [
+                {
+                  "name": "Authorization",
+                  "value": "{{_token}}"
+                },
+                {
+                  "name": "Content-Type",
+                  "value": "application/json; charset=utf-8"
+                }
+              ],
+              "scripts": {
+                "afterResponse": "/* test the add item to basket API\n    Author: Marcel Haag\n    Issue date: Sat 21 May, 2022\n*/\n\n//Successful to add the second item to basket with status code is 200\ninsomnia.test(\"Successful to add the second item to basket with status code is 200\", function () {\n    insomnia.response.to.have.status(200);\n});"
+              },
+              "settings": {
+                "renderRequestBody": true,
+                "encodeUrl": true,
+                "followRedirects": "global",
+                "cookies": {
+                  "send": true,
+                  "store": true
+                },
+                "rebuildPath": true
+              }
+            },
+            {
+              "url": "https://saftladen.automatisier.bar/api/BasketItems/",
+              "name": "AddFirstItemToBasket",
+              "meta": {
+                "id": "req_a50f96c788f042d0ac74c5518affde86",
+                "created": 1764021316766,
+                "modified": 1764073853565,
+                "isPrivate": false,
+                "description": "",
+                "sortKey": -1764021314983
+              },
+              "method": "POST",
+              "body": {
+                "mimeType": "text/plain",
+                "text": "{\"ProductId\":{{_product_1_id}},\"BasketId\":\"{{_bid}}\",\"quantity\":1}"
+              },
+              "headers": [
+                {
+                  "name": "Authorization",
+                  "value": "{{_token}}"
+                },
+                {
+                  "name": "Content-Type",
+                  "value": "application/json; charset=utf-8"
+                }
+              ],
+              "scripts": {
+                "afterResponse": "/* test the add item to basket API\n    Author: Marcel Haag\n    Issue date: Sat 21 May, 2022\n*/\n\nvar jsonData = JSON.parse(insomnia.response.text());\n//Get and save the basket order id of the first product item\ninsomnia.environment.set(\"_product_1_basket_id\", jsonData.data.id);\n\n//Successful to add the first item to basket with status code is 200\ninsomnia.test(\"Successful to add the first item to basket with status code is 200\", function () {\n    insomnia.response.to.have.status(200);\n});"
+              },
+              "settings": {
+                "renderRequestBody": true,
+                "encodeUrl": true,
+                "followRedirects": "global",
+                "cookies": {
+                  "send": true,
+                  "store": true
+                },
+                "rebuildPath": true
+              }
+            },
+            {
+              "url": "https://saftladen.automatisier.bar/rest/products/search",
+              "name": "getAllProduct",
+              "meta": {
+                "id": "req_c4686843562e486eae82cf99cf46760a",
+                "created": 1764021316766,
+                "modified": 1764073849269,
+                "isPrivate": false,
+                "description": "",
+                "sortKey": -1764021314984
+              },
+              "method": "GET",
+              "parameters": [
+                {
+                  "name": "q",
+                  "value": "",
+                  "disabled": false
+                }
+              ],
+              "headers": [
+                {
+                  "name": "Authorization",
+                  "value": "{{_token}}"
+                }
+              ],
+              "scripts": {
+                "afterResponse": "/* Test for the search API\n    Author: Marcel Haag\n    Issue date: Sat 21 May, 2022\n*/\n\n//Successful to get all product with status code is 200\ninsomnia.test(\"Successful to get all product with status code is 200\", function () {\n    insomnia.response.to.have.status(200);\n});\n\n//Get and save the id and name of the first product item \nvar jsonData = JSON.parse(insomnia.response.text());\ninsomnia.environment.set(\"_product_1_id\", jsonData.data[0].id);\ninsomnia.environment.set(\"_product_1_name\", jsonData.data[0].name);\n\n//Get and save the id and name of the second product item\ninsomnia.environment.set(\"_product_2_id\", jsonData.data[1].id);\ninsomnia.environment.set(\"_product_2_name\", jsonData.data[1].name);\n"
+              },
+              "settings": {
+                "renderRequestBody": true,
+                "encodeUrl": true,
+                "followRedirects": "global",
+                "cookies": {
+                  "send": true,
+                  "store": true
+                },
+                "rebuildPath": true
+              }
+            },
+            {
+              "url": "https://saftladen.automatisier.bar/api/BasketItems/{{_['_product_1_basket_id']}}",
+              "name": "deleteItemFromBasket",
+              "meta": {
+                "id": "req_047c24101b35434d998b3d7f1f9cbd66",
+                "created": 1764021316767,
+                "modified": 1764073866355,
+                "isPrivate": false,
+                "description": "",
+                "sortKey": -1764021314980
+              },
+              "method": "DELETE",
+              "headers": [
+                {
+                  "name": "Authorization",
+                  "value": "{{_token}}"
+                }
+              ],
+              "scripts": {
+                "afterResponse": "/* Test the get basket item API\n    Author: Marcel Haag\n    Issue date: Sat 21 May, 2022\n*/\n\n//Successful to get the basket item with status code is 200\ninsomnia.test(\"Successful to get the basket item with status code is 200\", function () {\n    insomnia.response.to.have.status(200);\n});\n\nvar jsonData = JSON.parse(insomnia.response.text());\n//Verify that the response status is success\ninsomnia.test(\"Verify that the response status is success\", function () {\n    insomnia.expect(jsonData.status).is.equal(\"success\");\n});\n"
+              },
+              "settings": {
+                "renderRequestBody": true,
+                "encodeUrl": true,
+                "followRedirects": "global",
+                "cookies": {
+                  "send": true,
+                  "store": true
+                },
+                "rebuildPath": true
+              }
+            },
+            {
+              "url": "https://saftladen.automatisier.bar/rest/basket/{{_['_bid']}}",
+              "name": "Verify1ItemInBasket",
+              "meta": {
+                "id": "req_8824c3825d0741a09e0681b18049e62a",
+                "created": 1764021316767,
+                "modified": 1764073872718,
+                "isPrivate": false,
+                "description": "",
+                "sortKey": -1764021314979
+              },
+              "method": "GET",
+              "headers": [
+                {
+                  "name": "Authorization",
+                  "value": "{{_token}}"
+                }
+              ],
+              "scripts": {
+                "afterResponse": "/* Test the get basket item API\n    Author: Marcel Haag\n    Issue date: Sat 21 May, 2022\n*/\n\n//Successful to get the basket item with status code is 200\ninsomnia.test(\"Successful to get the basket item with status code is 200\", function () {\n    insomnia.response.to.have.status(200);\n});\n\nvar jsonData = JSON.parse(insomnia.response.text());\n//Verify that the user basket have 2 items with the correct item name\ninsomnia.test(\"Verify that the user basket have 2 items with the correct item name\", function () {\n    insomnia.expect(jsonData.data.Products.length).is.equal(1);\n});\n\n//Verify that the first item in basket has the correct item id and name\n// The _product_1_ item is delete already, so the only item now is _product_2_id\ninsomnia.test(\"Verify that the first item in basket has the correct item id and name\", function () {\n    insomnia.expect(jsonData.data.Products[0].id).is.equal(Number(insomnia.environment.get(\"_product_2_id\")));\n    insomnia.expect(jsonData.data.Products[0].name).is.equal(insomnia.environment.get(\"_product_2_name\"));\n});"
+              },
+              "settings": {
+                "renderRequestBody": true,
+                "encodeUrl": true,
+                "followRedirects": "global",
+                "cookies": {
+                  "send": true,
+                  "store": true
+                },
+                "rebuildPath": true
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "cookieJar": {
+    "name": "Default Jar",
+    "meta": {
+      "id": "jar_3da85c4cdec64015921086e48391bdcd",
+      "created": 1764021288039,
+      "modified": 1764073774794
+    }
+  },
+  "environments": {
+    "name": "Base Environment",
+    "meta": {
+      "id": "env_c80629a8dd284421b9a80738a0416f29",
+      "created": 1764021288038,
+      "modified": 1764073774796,
+      "isPrivate": false
+    },
+    "data": {
+      "_email": "Dixie_Fay-Halvorson10@yahoo.com",
+      "_password": "Uuon8KLASlNo0oN",
+      "_token": "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJzdGF0dXMiOiJzdWNjZXNzIiwiZGF0YSI6eyJpZCI6MSwidXNlcm5hbWUiOiIiLCJlbWFpbCI6ImFkbWluQGp1aWNlLXNoLm9wIiwicGFzc3dvcmQiOiIwMTkyMDIzYTdiYmQ3MzI1MDUxNmYwNjlkZjE4YjUwMCIsInJvbGUiOiJhZG1pbiIsImRlbHV4ZVRva2VuIjoiIiwibGFzdExvZ2luSXAiOiIiLCJwcm9maWxlSW1hZ2UiOiJhc3NldHMvcHVibGljL2ltYWdlcy91cGxvYWRzL2RlZmF1bHRBZG1pbi5wbmciLCJ0b3RwU2VjcmV0IjoiIiwiaXNBY3RpdmUiOnRydWUsImNyZWF0ZWRBdCI6IjIwMjUtMTEtMjQgMjE6NTk6MzkuMDcyICswMDowMCIsInVwZGF0ZWRBdCI6IjIwMjUtMTEtMjQgMjE6NTk6MzkuMDcyICswMDowMCIsImRlbGV0ZWRBdCI6bnVsbH0sImlhdCI6MTc2NDA3Mzc3NX0.bT1AuF8MI1SFlDLF8bSI5R8DHJx21XtVWXHCxRgxsDVUdJCs5AbqdTG4LxmPj-mTgBHaQAv_Ncl_cPX1P0-iy8wfWTwaRBIPtGO8FpgScuRpGnexRXMPbpN7p-nE1NSqbbaLAxFg4si5u4sPlb5bPD2Nzb-Ns925C322icoLKZk",
+      "_bid": 1
+    }
+  }
+}

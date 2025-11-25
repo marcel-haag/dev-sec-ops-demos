@@ -1,0 +1,84 @@
+# This workflow uses actions that are not certified by GitHub.
+# They are provided by a third-party and are governed by
+# separate terms of service, privacy policy, and support
+# documentation.
+
+# GitHub recommends pinning actions to a commit SHA.
+# To get a newer version, you will need to update the SHA.
+# You can also reference a tag or branch, but the action may change without warning.
+
+name: "PoC (Full Scan)"
+
+on:
+  workflow_dispatch:
+    inputs:
+      url:
+        description: "Url of the target"
+        required: true
+        type: string
+
+#on:
+#  schedule:
+# Runs every sunday at 00:00.
+# - cron:  '0 0 * * 0'
+
+permissions:
+  contents: write
+  issues: write
+
+jobs:
+  zap_docker_full_scan:
+    name: "ZAP Fullscan Job"
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: "Pull ZAP Image"
+        run: docker pull zaproxy/zap-weekly
+
+      - name: Debug File Path
+        run: |
+          ls -la /
+          ls -la ./
+          ls -la $(pwd)
+          echo "Github Workspace:"
+          ls -la $GITHUB_WORKSPACE
+          ls -la $GITHUB_WORKSPACE/DAST/scripts
+
+      # https://www.zaproxy.org/docs/docker/full-scan
+      - name: "Run ZAP Full Scan (json)"
+        run: |
+          set +e
+          chmod -R 777 $GITHUB_WORKSPACE
+          docker run -v $GITHUB_WORKSPACE:/zap/wrk/:rw -t zaproxy/zap-weekly \
+            zap-full-scan.py -t ${{ inputs.url }} -r zap_report.html -w zap_report.md \
+            -z "-config script.scripts.debug=true -script '/zap/wrk/DAST/scripts/set-auth-header.js'"
+          echo "ZAP completed with exit code $?"
+          set -e
+
+      - name: Upload ZAP Report
+        uses: actions/upload-artifact@v4
+        with:
+          name: zap_full_report
+          path: zap_report.html
+
+      - name: Read ZAP Markdown Report
+        id: read-md-report
+        run: |
+          head -n 30 zap_report.md > summary.md
+          REPORT_CONTENT=$(cat summary.md)
+          echo "report-content<<EOF" >> $GITHUB_ENV
+          echo "$REPORT_CONTENT" >> $GITHUB_ENV
+          echo "EOF" >> $GITHUB_ENV
+
+      - name: "Show Report Summary"
+        if: success()
+        run: |
+          echo "Message: Scan succeeded. Check artifact to read the full Report."
+
+      - name: "Show Error Message"
+        if: failure()
+        run: |
+          echo "Message: The build for the Fullscan Report is Failed.."
