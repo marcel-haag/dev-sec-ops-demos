@@ -1,0 +1,74 @@
+# This workflow uses actions that are not certified by GitHub.
+# They are provided by a third-party and are governed by
+# separate terms of service, privacy policy, and support
+# documentation.
+
+# GitHub recommends pinning actions to a commit SHA.
+# To get a newer version, you will need to update the SHA.
+# You can also reference a tag or branch, but the action may change without warning.
+
+name: "PoC (API Scan)"
+
+on: workflow_dispatch
+
+
+#on:
+#  schedule:
+# Runs every sunday at 00:00.
+# - cron:  '0 0 * * 0'
+
+jobs:
+  zap_docker_api_scan:
+    name: "ZAP API Job"
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: "Pull ZAP Image"
+        run: docker pull zaproxy/zap-weekly
+
+      - name: Debug File Path
+        run: |
+          ls -la /
+          ls -la ./
+          ls -la $(pwd)
+          echo "Github Workspace:"
+          ls -la $GITHUB_WORKSPACE
+          ls -la $GITHUB_WORKSPACE/DAST/openapi
+
+      # https://www.zaproxy.org/blog/2017-06-19-scanning-apis-with-zap/
+      - name: "Run ZAP API Scan (json)"
+        run: |
+          set +e
+          docker run -v $(pwd):/zap/wrk/:rw -t zaproxy/zap-weekly zap-api-scan.py -t ./DAST/openapi/juice-shop-openapi-collection.json -f openapi \ 
+            -r zap_api_report.html -w zap_api_report.md -g ./DAST/config/api-active-scan.conf # -z options.prop
+           
+          echo "ZAP completed with exit code $?"
+          set -e
+
+      - name: Upload ZAP Report
+        uses: actions/upload-artifact@v3
+        with:
+          name: zap-report
+          path: zap_api_report.html
+
+      - name: Read ZAP Markdown Report
+        id: read-md-report
+        run: |
+          head -n 30 zap_api_report.md > summary.md
+          REPORT_CONTENT=$(cat summary.md)
+          echo "report-content<<EOF" >> $GITHUB_ENV
+          echo "$REPORT_CONTENT" >> $GITHUB_ENV
+          echo "EOF" >> $GITHUB_ENV
+
+      - name: "Show Report Summary"
+        if: success()
+        run: |
+          cat ${{ env.report-content }}
+
+      - name: "Show Error Message"
+        if: failure()
+        run: |
+          echo "Message: The build for the API Report is Failed.."
