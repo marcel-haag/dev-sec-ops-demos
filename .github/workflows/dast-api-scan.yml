@@ -49,7 +49,7 @@ jobs:
           chmod -R 777 $GITHUB_WORKSPACE
           docker run -v $(pwd):/zap/wrk/:rw -t zaproxy/zap-weekly \
             zap-api-scan.py -t ./DAST/openapi/juice-shop-openapi-collection.json -f openapi \
-            -r zap_report.html -w zap_report.md -g ./DAST/config/api-active-scan.conf
+            -r zap_report.html -x zap_report.xml -w zap_report.md -g ./DAST/config/api-active-scan.conf
            
           echo "ZAP completed with exit code $?"
           set -e
@@ -58,7 +58,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: zap_api_report
-          path: zap_report.html
+          path: zap_report.xml
 
       - name: Read ZAP Markdown Report
         id: read-md-report
