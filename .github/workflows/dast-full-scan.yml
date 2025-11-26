@@ -53,7 +53,7 @@ jobs:
           set +e
           chmod -R 777 $GITHUB_WORKSPACE
           docker run -v $GITHUB_WORKSPACE:/zap/wrk/:rw -t zaproxy/zap-weekly \
-            zap-full-scan.py -t ${{ inputs.url }} -r zap_report.html -w zap_report.md \
+            zap-full-scan.py -t ${{ inputs.url }} -r zap_report.html -x zap_report.xml -w zap_report.md \
             -z "-config script.scripts.debug=true -script '/zap/wrk/DAST/scripts/set-auth-header.js'"
           echo "ZAP completed with exit code $?"
           set -e
@@ -62,7 +62,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: zap_full_report
-          path: zap_report.html
+          path: zap_report.xml
 
       - name: Read ZAP Markdown Report
         id: read-md-report

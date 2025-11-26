@@ -1,0 +1,1005 @@
+<?xml version="1.0"?>
+<OWASPZAPReport programName="ZAP" version="D-2025-11-24" generated="Wed, 26 Nov 2025 12:07:09" created="2025-11-26T12:07:09.552802463Z">
+	
+		<site name="https://saftladen.automatisier.bar" host="saftladen.automatisier.bar" port="443" ssl="true">
+			<alerts>
+				
+					<alertitem>
+						<pluginid>40018</pluginid>
+						<alertRef>40018</alertRef>
+						<alert>SQL Injection</alert>
+						<name>SQL Injection</name>
+						<riskcode>3</riskcode>
+						<confidence>1</confidence>
+						<riskdesc>High (Low)</riskdesc>
+						<confidencedesc>Low</confidencedesc>
+						<desc>&lt;p&gt;SQL injection may be possible.&lt;/p&gt;</desc>
+						<instances>
+							
+								<instance>
+									<uri>https://saftladen.automatisier.bar/rest/products/search?q=q%27</uri>
+									<nodeName>https://saftladen.automatisier.bar/rest/products/search (q)</nodeName>
+									<method>GET</method>
+									<param>q</param>
+									<attack>q&apos;</attack>
+									<evidence>HTTP/1.1 500 Internal Server Error</evidence>
+									<otherinfo></otherinfo>
+								</instance>
+							
+							
+								<instance>
+									<uri>https://saftladen.automatisier.bar/rest/user/login</uri>
+									<nodeName>https://saftladen.automatisier.bar/rest/user/login ()({email,password})</nodeName>
+									<method>POST</method>
+									<param>email</param>
+									<attack>&apos;</attack>
+									<evidence>HTTP/1.1 500 Internal Server Error</evidence>
+									<otherinfo></otherinfo>
+								</instance>
+							
+						</instances>
+						<count>2</count>
+						<systemic>false</systemic>
+						<solution>&lt;p&gt;Do not trust client side input, even if there is client side validation in place.&lt;/p&gt;&lt;p&gt;In general, type check all data on the server side.&lt;/p&gt;&lt;p&gt;If the application uses JDBC, use PreparedStatement or CallableStatement, with parameters passed by &apos;?&apos;&lt;/p&gt;&lt;p&gt;If the application uses ASP, use ADO Command Objects with strong type checking and parameterized queries.&lt;/p&gt;&lt;p&gt;If database Stored Procedures can be used, use them.&lt;/p&gt;&lt;p&gt;Do *not* concatenate strings into queries in the stored procedure, or use &apos;exec&apos;, &apos;exec immediate&apos;, or equivalent functionality!&lt;/p&gt;&lt;p&gt;Do not create dynamic SQL queries using simple string concatenation.&lt;/p&gt;&lt;p&gt;Escape all data received from the client.&lt;/p&gt;&lt;p&gt;Apply an &apos;allow list&apos; of allowed characters, or a &apos;deny list&apos; of disallowed characters in user input.&lt;/p&gt;&lt;p&gt;Apply the principle of least privilege by using the least privileged database user possible.&lt;/p&gt;&lt;p&gt;In particular, avoid using the &apos;sa&apos; or &apos;db-owner&apos; database users. This does not eliminate SQL injection, but minimizes its impact.&lt;/p&gt;&lt;p&gt;Grant the minimum database access that is necessary for the application.&lt;/p&gt;</solution>
+						<otherinfo></otherinfo>
+						<reference>&lt;p&gt;https://cheatsheetseries.owasp.org/cheatsheets/SQL_Injection_Prevention_Cheat_Sheet.html&lt;/p&gt;</reference>
+						<cweid>89</cweid>
+						<wascid>19</wascid>
+						<sourceid>391</sourceid>
+					</alertitem>
+				
+				
+					<alertitem>
+						<pluginid>10038</pluginid>
+						<alertRef>10038-1</alertRef>
+						<alert>Content Security Policy (CSP) Header Not Set</alert>
+						<name>Content Security Policy (CSP) Header Not Set</name>
+						<riskcode>2</riskcode>
+						<confidence>3</confidence>
+						<riskdesc>Medium (High)</riskdesc>
+						<confidencedesc>High</confidencedesc>
+						<desc>&lt;p&gt;Content Security Policy (CSP) is an added layer of security that helps to detect and mitigate certain types of attacks, including Cross Site Scripting (XSS) and data injection attacks. These attacks are used for everything from data theft to site defacement or distribution of malware. CSP provides a set of standard HTTP headers that allow website owners to declare approved sources of content that browsers should be allowed to load on that page &#x2014; covered types are JavaScript, CSS, HTML frames, fonts, images and embeddable objects such as Java applets, ActiveX, audio and video files.&lt;/p&gt;</desc>
+						<instances>
+							
+								<instance>
+									<uri>https://saftladen.automatisier.bar/rest/user/login</uri>
+									<nodeName>https://saftladen.automatisier.bar/rest/user/login ()({email,password})</nodeName>
+									<method>POST</method>
+									<param></param>
+									<attack></attack>
+									<evidence></evidence>
+									<otherinfo></otherinfo>
+								</instance>
+							
+						</instances>
+						<count>1</count>
+						<systemic>true</systemic>
+						<solution>&lt;p&gt;Ensure that your web server, application server, load balancer, etc. is configured to set the Content-Security-Policy header.&lt;/p&gt;</solution>
+						<otherinfo></otherinfo>
+						<reference>&lt;p&gt;https://developer.mozilla.org/en-US/docs/Web/HTTP/Guides/CSP&lt;/p&gt;&lt;p&gt;https://cheatsheetseries.owasp.org/cheatsheets/Content_Security_Policy_Cheat_Sheet.html&lt;/p&gt;&lt;p&gt;https://www.w3.org/TR/CSP/&lt;/p&gt;&lt;p&gt;https://w3c.github.io/webappsec-csp/&lt;/p&gt;&lt;p&gt;https://web.dev/articles/csp&lt;/p&gt;&lt;p&gt;https://caniuse.com/#feat=contentsecuritypolicy&lt;/p&gt;&lt;p&gt;https://content-security-policy.com/&lt;/p&gt;</reference>
+						<cweid>693</cweid>
+						<wascid>15</wascid>
+						<sourceid>10</sourceid>
+					</alertitem>
+				
+				
+					<alertitem>
+						<pluginid>10098</pluginid>
+						<alertRef>10098</alertRef>
+						<alert>Cross-Domain Misconfiguration</alert>
+						<name>Cross-Domain Misconfiguration</name>
+						<riskcode>2</riskcode>
+						<confidence>2</confidence>
+						<riskdesc>Medium (Medium)</riskdesc>
+						<confidencedesc>Medium</confidencedesc>
+						<desc>&lt;p&gt;Web browser data loading may be possible, due to a Cross Origin Resource Sharing (CORS) misconfiguration on the web server.&lt;/p&gt;</desc>
+						<instances>
+							
+								<instance>
+									<uri>https://saftladen.automatisier.bar/rest/basket/%7B%7B_%5B&apos;_bid&apos;%5D%7D%7D</uri>
+									<nodeName>https://saftladen.automatisier.bar/rest/basket/{{_[&apos;_bid&apos;]}}</nodeName>
+									<method>GET</method>
+									<param></param>
+									<attack></attack>
+									<evidence>Access-Control-Allow-Origin: *</evidence>
+									<otherinfo>The CORS misconfiguration on the web server permits cross-domain read requests from arbitrary third party domains, using unauthenticated APIs on this domain. Web browser implementations do not permit arbitrary third parties to read the response from authenticated APIs, however. This reduces the risk somewhat. This misconfiguration could be used by an attacker to access data that is available in an unauthenticated manner, but which uses some other form of security, such as IP address white-listing.</otherinfo>
+								</instance>
+							
+							
+								<instance>
+									<uri>https://saftladen.automatisier.bar/rest/products/search?q=q</uri>
+									<nodeName>https://saftladen.automatisier.bar/rest/products/search (q)</nodeName>
+									<method>GET</method>
+									<param></param>
+									<attack></attack>
+									<evidence>Access-Control-Allow-Origin: *</evidence>
+									<otherinfo>The CORS misconfiguration on the web server permits cross-domain read requests from arbitrary third party domains, using unauthenticated APIs on this domain. Web browser implementations do not permit arbitrary third parties to read the response from authenticated APIs, however. This reduces the risk somewhat. This misconfiguration could be used by an attacker to access data that is available in an unauthenticated manner, but which uses some other form of security, such as IP address white-listing.</otherinfo>
+								</instance>
+							
+							
+								<instance>
+									<uri>https://saftladen.automatisier.bar/api/BasketItems/</uri>
+									<nodeName>https://saftladen.automatisier.bar/api/BasketItems/ ()({id,ProductId,BasketId,quantity})</nodeName>
+									<method>POST</method>
+									<param></param>
+									<attack></attack>
+									<evidence>Access-Control-Allow-Origin: *</evidence>
+									<otherinfo>The CORS misconfiguration on the web server permits cross-domain read requests from arbitrary third party domains, using unauthenticated APIs on this domain. Web browser implementations do not permit arbitrary third parties to read the response from authenticated APIs, however. This reduces the risk somewhat. This misconfiguration could be used by an attacker to access data that is available in an unauthenticated manner, but which uses some other form of security, such as IP address white-listing.</otherinfo>
+								</instance>
+							
+							
+								<instance>
+									<uri>https://saftladen.automatisier.bar/api/Users/</uri>
+									<nodeName>https://saftladen.automatisier.bar/api/Users/ ()({id,email,password,securityQuestion:{id,question},securityAnswer})</nodeName>
+									<method>POST</method>
+									<param></param>
+									<attack></attack>
+									<evidence>Access-Control-Allow-Origin: *</evidence>
+									<otherinfo>The CORS misconfiguration on the web server permits cross-domain read requests from arbitrary third party domains, using unauthenticated APIs on this domain. Web browser implementations do not permit arbitrary third parties to read the response from authenticated APIs, however. This reduces the risk somewhat. This misconfiguration could be used by an attacker to access data that is available in an unauthenticated manner, but which uses some other form of security, such as IP address white-listing.</otherinfo>
+								</instance>
+							
+							
+								<instance>
+									<uri>https://saftladen.automatisier.bar/rest/user/login</uri>
+									<nodeName>https://saftladen.automatisier.bar/rest/user/login ()({email,password})</nodeName>
+									<method>POST</method>
+									<param></param>
+									<attack></attack>
+									<evidence>Access-Control-Allow-Origin: *</evidence>
+									<otherinfo>The CORS misconfiguration on the web server permits cross-domain read requests from arbitrary third party domains, using unauthenticated APIs on this domain. Web browser implementations do not permit arbitrary third parties to read the response from authenticated APIs, however. This reduces the risk somewhat. This misconfiguration could be used by an attacker to access data that is available in an unauthenticated manner, but which uses some other form of security, such as IP address white-listing.</otherinfo>
+								</instance>
+							
+						</instances>
+						<count>5</count>
+						<systemic>true</systemic>
+						<solution>&lt;p&gt;Ensure that sensitive data is not available in an unauthenticated manner (using IP address white-listing, for instance).&lt;/p&gt;&lt;p&gt;Configure the &quot;Access-Control-Allow-Origin&quot; HTTP header to a more restrictive set of domains, or remove all CORS headers entirely, to allow the web browser to enforce the Same Origin Policy (SOP) in a more restrictive manner.&lt;/p&gt;</solution>
+						<otherinfo>&lt;p&gt;The CORS misconfiguration on the web server permits cross-domain read requests from arbitrary third party domains, using unauthenticated APIs on this domain. Web browser implementations do not permit arbitrary third parties to read the response from authenticated APIs, however. This reduces the risk somewhat. This misconfiguration could be used by an attacker to access data that is available in an unauthenticated manner, but which uses some other form of security, such as IP address white-listing.&lt;/p&gt;</otherinfo>
+						<reference>&lt;p&gt;https://vulncat.fortify.com/en/detail?category=HTML5&amp;subcategory=Overly%20Permissive%20CORS%20Policy&lt;/p&gt;</reference>
+						<cweid>264</cweid>
+						<wascid>14</wascid>
+						<sourceid>5</sourceid>
+					</alertitem>
+				
+				
+					<alertitem>
+						<pluginid>30003</pluginid>
+						<alertRef>30003</alertRef>
+						<alert>Integer Overflow Error</alert>
+						<name>Integer Overflow Error</name>
+						<riskcode>2</riskcode>
+						<confidence>2</confidence>
+						<riskdesc>Medium (Medium)</riskdesc>
+						<confidencedesc>Medium</confidencedesc>
+						<desc>&lt;p&gt;An integer overflow condition exists when an integer used in a compiled program extends beyond the range limits and has not been properly checked from the input stream.&lt;/p&gt;</desc>
+						<instances>
+							
+								<instance>
+									<uri>https://saftladen.automatisier.bar/api/Users/</uri>
+									<nodeName>https://saftladen.automatisier.bar/api/Users/ ()({id,email,password,securityQuestion:{id,question},securityAnswer})</nodeName>
+									<method>POST</method>
+									<param>id</param>
+									<attack>58446424377782773853415217208207423625127679</attack>
+									<evidence>HTTP/1.1 500 Internal Server Error</evidence>
+									<otherinfo>Potential Integer Overflow. Status code changed on the input of a long string of random integers.</otherinfo>
+								</instance>
+							
+						</instances>
+						<count>1</count>
+						<systemic>false</systemic>
+						<solution>&lt;p&gt;In order to prevent overflows and divide by 0 (zero) errors in the application, please rewrite the backend program, checking if the values of integers being processed are within the application&apos;s allowed range. This will require a recompilation of the backend executable.&lt;/p&gt;</solution>
+						<otherinfo>&lt;p&gt;Potential Integer Overflow. Status code changed on the input of a long string of random integers.&lt;/p&gt;</otherinfo>
+						<reference>&lt;p&gt;https://en.wikipedia.org/wiki/Integer_overflow&lt;/p&gt;&lt;p&gt;https://cwe.mitre.org/data/definitions/190.html&lt;/p&gt;</reference>
+						<cweid>190</cweid>
+						<wascid>3</wascid>
+						<sourceid>1541</sourceid>
+					</alertitem>
+				
+				
+					<alertitem>
+						<pluginid>100000</pluginid>
+						<alertRef>100000</alertRef>
+						<alert>A Server Error response code was returned by the server</alert>
+						<name>A Server Error response code was returned by the server</name>
+						<riskcode>1</riskcode>
+						<confidence>3</confidence>
+						<riskdesc>Low (High)</riskdesc>
+						<confidencedesc>High</confidencedesc>
+						<desc>&lt;p&gt;A response code of 500 was returned by the server.&lt;/p&gt;&lt;p&gt;This may indicate that the application is failing to handle unexpected input correctly.&lt;/p&gt;&lt;p&gt;Raised by the &apos;Alert on HTTP Response Code Error&apos; script&lt;/p&gt;</desc>
+						<instances>
+							
+								<instance>
+									<uri>https://saftladen.automatisier.bar/api</uri>
+									<nodeName>https://saftladen.automatisier.bar/api</nodeName>
+									<method>GET</method>
+									<param></param>
+									<attack></attack>
+									<evidence>500</evidence>
+									<otherinfo></otherinfo>
+								</instance>
+							
+							
+								<instance>
+									<uri>https://saftladen.automatisier.bar/api/</uri>
+									<nodeName>https://saftladen.automatisier.bar/api/</nodeName>
+									<method>GET</method>
+									<param></param>
+									<attack></attack>
+									<evidence>500</evidence>
+									<otherinfo></otherinfo>
+								</instance>
+							
+							
+								<instance>
+									<uri>https://saftladen.automatisier.bar/api/8350295737365622362</uri>
+									<nodeName>https://saftladen.automatisier.bar/api/8350295737365622362</nodeName>
+									<method>GET</method>
+									<param></param>
+									<attack></attack>
+									<evidence>500</evidence>
+									<otherinfo></otherinfo>
+								</instance>
+							
+							
+								<instance>
+									<uri>https://saftladen.automatisier.bar/rest</uri>
+									<nodeName>https://saftladen.automatisier.bar/rest</nodeName>
+									<method>GET</method>
+									<param></param>
+									<attack></attack>
+									<evidence>500</evidence>
+									<otherinfo></otherinfo>
+								</instance>
+							
+							
+								<instance>
+									<uri>https://saftladen.automatisier.bar/rest/</uri>
+									<nodeName>https://saftladen.automatisier.bar/rest/</nodeName>
+									<method>GET</method>
+									<param></param>
+									<attack></attack>
+									<evidence>500</evidence>
+									<otherinfo></otherinfo>
+								</instance>
+							
+							
+								<instance>
+									<uri>https://saftladen.automatisier.bar/rest/1801364921777939240</uri>
+									<nodeName>https://saftladen.automatisier.bar/rest/1801364921777939240</nodeName>
+									<method>GET</method>
+									<param></param>
+									<attack></attack>
+									<evidence>500</evidence>
+									<otherinfo></otherinfo>
+								</instance>
+							
+							
+								<instance>
+									<uri>https://saftladen.automatisier.bar/rest/products</uri>
+									<nodeName>https://saftladen.automatisier.bar/rest/products</nodeName>
+									<method>GET</method>
+									<param></param>
+									<attack></attack>
+									<evidence>500</evidence>
+									<otherinfo></otherinfo>
+								</instance>
+							
+							
+								<instance>
+									<uri>https://saftladen.automatisier.bar/rest/products/</uri>
+									<nodeName>https://saftladen.automatisier.bar/rest/products/</nodeName>
+									<method>GET</method>
+									<param></param>
+									<attack></attack>
+									<evidence>500</evidence>
+									<otherinfo></otherinfo>
+								</instance>
+							
+							
+								<instance>
+									<uri>https://saftladen.automatisier.bar/rest/products/7254158938773952771</uri>
+									<nodeName>https://saftladen.automatisier.bar/rest/products/7254158938773952771</nodeName>
+									<method>GET</method>
+									<param></param>
+									<attack></attack>
+									<evidence>500</evidence>
+									<otherinfo></otherinfo>
+								</instance>
+							
+							
+								<instance>
+									<uri>https://saftladen.automatisier.bar/rest/products/search?q=5%3BURL%3D%27https%3A%2F%2F2568887414842965928.owasp.org%27</uri>
+									<nodeName>https://saftladen.automatisier.bar/rest/products/search (q)</nodeName>
+									<method>GET</method>
+									<param></param>
+									<attack></attack>
+									<evidence>500</evidence>
+									<otherinfo></otherinfo>
+								</instance>
+							
+							
+								<instance>
+									<uri>https://saftladen.automatisier.bar/rest/user</uri>
+									<nodeName>https://saftladen.automatisier.bar/rest/user</nodeName>
+									<method>GET</method>
+									<param></param>
+									<attack></attack>
+									<evidence>500</evidence>
+									<otherinfo></otherinfo>
+								</instance>
+							
+							
+								<instance>
+									<uri>https://saftladen.automatisier.bar/rest/user/</uri>
+									<nodeName>https://saftladen.automatisier.bar/rest/user/</nodeName>
+									<method>GET</method>
+									<param></param>
+									<attack></attack>
+									<evidence>500</evidence>
+									<otherinfo></otherinfo>
+								</instance>
+							
+							
+								<instance>
+									<uri>https://saftladen.automatisier.bar/rest/user/9202410435311629202</uri>
+									<nodeName>https://saftladen.automatisier.bar/rest/user/9202410435311629202</nodeName>
+									<method>GET</method>
+									<param></param>
+									<attack></attack>
+									<evidence>500</evidence>
+									<otherinfo></otherinfo>
+								</instance>
+							
+							
+								<instance>
+									<uri>https://saftladen.automatisier.bar/api/Users/</uri>
+									<nodeName>https://saftladen.automatisier.bar/api/Users/ ()({id,email,password,securityQuestion:{id,question},securityAnswer})</nodeName>
+									<method>POST</method>
+									<param></param>
+									<attack></attack>
+									<evidence>500</evidence>
+									<otherinfo></otherinfo>
+								</instance>
+							
+							
+								<instance>
+									<uri>https://saftladen.automatisier.bar/rest/user/login</uri>
+									<nodeName>https://saftladen.automatisier.bar/rest/user/login ()({email,password})</nodeName>
+									<method>POST</method>
+									<param></param>
+									<attack></attack>
+									<evidence>500</evidence>
+									<otherinfo></otherinfo>
+								</instance>
+							
+						</instances>
+						<count>15</count>
+						<systemic>false</systemic>
+						<solution></solution>
+						<otherinfo></otherinfo>
+						<reference></reference>
+						<cweid>388</cweid>
+						<wascid>20</wascid>
+						<sourceid>38</sourceid>
+					</alertitem>
+				
+				
+					<alertitem>
+						<pluginid>10063</pluginid>
+						<alertRef>10063-2</alertRef>
+						<alert>Deprecated Feature Policy Header Set</alert>
+						<name>Deprecated Feature Policy Header Set</name>
+						<riskcode>1</riskcode>
+						<confidence>2</confidence>
+						<riskdesc>Low (Medium)</riskdesc>
+						<confidencedesc>Medium</confidencedesc>
+						<desc>&lt;p&gt;The header has now been renamed to Permissions-Policy.&lt;/p&gt;</desc>
+						<instances>
+							
+								<instance>
+									<uri>https://saftladen.automatisier.bar/rest/user/login</uri>
+									<nodeName>https://saftladen.automatisier.bar/rest/user/login ()({email,password})</nodeName>
+									<method>POST</method>
+									<param></param>
+									<attack></attack>
+									<evidence>Feature-Policy</evidence>
+									<otherinfo></otherinfo>
+								</instance>
+							
+						</instances>
+						<count>1</count>
+						<systemic>true</systemic>
+						<solution>&lt;p&gt;Ensure that your web server, application server, load balancer, etc. is configured to set the Permissions-Policy header instead of the Feature-Policy header.&lt;/p&gt;</solution>
+						<otherinfo></otherinfo>
+						<reference>&lt;p&gt;https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Headers/Permissions-Policy&lt;/p&gt;&lt;p&gt;https://scotthelme.co.uk/goodbye-feature-policy-and-hello-permissions-policy/&lt;/p&gt;</reference>
+						<cweid>16</cweid>
+						<wascid>15</wascid>
+						<sourceid>10</sourceid>
+					</alertitem>
+				
+				
+					<alertitem>
+						<pluginid>10035</pluginid>
+						<alertRef>10035-1</alertRef>
+						<alert>Strict-Transport-Security Header Not Set</alert>
+						<name>Strict-Transport-Security Header Not Set</name>
+						<riskcode>1</riskcode>
+						<confidence>3</confidence>
+						<riskdesc>Low (High)</riskdesc>
+						<confidencedesc>High</confidencedesc>
+						<desc>&lt;p&gt;HTTP Strict Transport Security (HSTS) is a web security policy mechanism whereby a web server declares that complying user agents (such as a web browser) are to interact with it using only secure HTTPS connections (i.e. HTTP layered over TLS/SSL). HSTS is an IETF standards track protocol and is specified in RFC 6797.&lt;/p&gt;</desc>
+						<instances>
+							
+								<instance>
+									<uri>https://saftladen.automatisier.bar/api/BasketItems/%7B%7B_%5B&apos;_product_1_basket_id&apos;%5D%7D%7D</uri>
+									<nodeName>https://saftladen.automatisier.bar/api/BasketItems/{{_[&apos;_product_1_basket_id&apos;]}}</nodeName>
+									<method>DELETE</method>
+									<param></param>
+									<attack></attack>
+									<evidence></evidence>
+									<otherinfo></otherinfo>
+								</instance>
+							
+							
+								<instance>
+									<uri>https://saftladen.automatisier.bar/rest/basket/%7B%7B_%5B&apos;_bid&apos;%5D%7D%7D</uri>
+									<nodeName>https://saftladen.automatisier.bar/rest/basket/{{_[&apos;_bid&apos;]}}</nodeName>
+									<method>GET</method>
+									<param></param>
+									<attack></attack>
+									<evidence></evidence>
+									<otherinfo></otherinfo>
+								</instance>
+							
+							
+								<instance>
+									<uri>https://saftladen.automatisier.bar/rest/products/search?q=q</uri>
+									<nodeName>https://saftladen.automatisier.bar/rest/products/search (q)</nodeName>
+									<method>GET</method>
+									<param></param>
+									<attack></attack>
+									<evidence></evidence>
+									<otherinfo></otherinfo>
+								</instance>
+							
+							
+								<instance>
+									<uri>https://saftladen.automatisier.bar/api/Users/</uri>
+									<nodeName>https://saftladen.automatisier.bar/api/Users/ ()({id,email,password,securityQuestion:{id,question},securityAnswer})</nodeName>
+									<method>POST</method>
+									<param></param>
+									<attack></attack>
+									<evidence></evidence>
+									<otherinfo></otherinfo>
+								</instance>
+							
+							
+								<instance>
+									<uri>https://saftladen.automatisier.bar/rest/user/login</uri>
+									<nodeName>https://saftladen.automatisier.bar/rest/user/login ()({email,password})</nodeName>
+									<method>POST</method>
+									<param></param>
+									<attack></attack>
+									<evidence></evidence>
+									<otherinfo></otherinfo>
+								</instance>
+							
+						</instances>
+						<count>5</count>
+						<systemic>true</systemic>
+						<solution>&lt;p&gt;Ensure that your web server, application server, load balancer, etc. is configured to enforce Strict-Transport-Security.&lt;/p&gt;</solution>
+						<otherinfo></otherinfo>
+						<reference>&lt;p&gt;https://cheatsheetseries.owasp.org/cheatsheets/HTTP_Strict_Transport_Security_Cheat_Sheet.html&lt;/p&gt;&lt;p&gt;https://owasp.org/www-community/Security_Headers&lt;/p&gt;&lt;p&gt;https://en.wikipedia.org/wiki/HTTP_Strict_Transport_Security&lt;/p&gt;&lt;p&gt;https://caniuse.com/stricttransportsecurity&lt;/p&gt;&lt;p&gt;https://datatracker.ietf.org/doc/html/rfc6797&lt;/p&gt;</reference>
+						<cweid>319</cweid>
+						<wascid>15</wascid>
+						<sourceid>14</sourceid>
+					</alertitem>
+				
+				
+					<alertitem>
+						<pluginid>100001</pluginid>
+						<alertRef>100001</alertRef>
+						<alert>Unexpected Content-Type was returned</alert>
+						<name>Unexpected Content-Type was returned</name>
+						<riskcode>1</riskcode>
+						<confidence>3</confidence>
+						<riskdesc>Low (High)</riskdesc>
+						<confidencedesc>High</confidencedesc>
+						<desc>&lt;p&gt;A Content-Type of text/html was returned by the server.&lt;/p&gt;&lt;p&gt;This is not one of the types expected to be returned by an API.&lt;/p&gt;&lt;p&gt;Raised by the &apos;Alert on Unexpected Content Types&apos; script&lt;/p&gt;</desc>
+						<instances>
+							
+								<instance>
+									<uri>https://saftladen.automatisier.bar</uri>
+									<nodeName>https://saftladen.automatisier.bar</nodeName>
+									<method>GET</method>
+									<param></param>
+									<attack></attack>
+									<evidence>text/html</evidence>
+									<otherinfo></otherinfo>
+								</instance>
+							
+							
+								<instance>
+									<uri>https://saftladen.automatisier.bar/</uri>
+									<nodeName>https://saftladen.automatisier.bar/</nodeName>
+									<method>GET</method>
+									<param></param>
+									<attack></attack>
+									<evidence>text/html</evidence>
+									<otherinfo></otherinfo>
+								</instance>
+							
+							
+								<instance>
+									<uri>https://saftladen.automatisier.bar/3792608855052275511</uri>
+									<nodeName>https://saftladen.automatisier.bar/3792608855052275511</nodeName>
+									<method>GET</method>
+									<param></param>
+									<attack></attack>
+									<evidence>text/html</evidence>
+									<otherinfo></otherinfo>
+								</instance>
+							
+							
+								<instance>
+									<uri>https://saftladen.automatisier.bar/4707305512627819920</uri>
+									<nodeName>https://saftladen.automatisier.bar/4707305512627819920</nodeName>
+									<method>GET</method>
+									<param></param>
+									<attack></attack>
+									<evidence>text/html</evidence>
+									<otherinfo></otherinfo>
+								</instance>
+							
+							
+								<instance>
+									<uri>https://saftladen.automatisier.bar/rest/user/login</uri>
+									<nodeName>https://saftladen.automatisier.bar/rest/user/login ()({email,password})</nodeName>
+									<method>POST</method>
+									<param></param>
+									<attack></attack>
+									<evidence>text/html</evidence>
+									<otherinfo></otherinfo>
+								</instance>
+							
+							
+								<instance>
+									<uri>https://saftladen.automatisier.bar/rest/user/login/</uri>
+									<nodeName>https://saftladen.automatisier.bar/rest/user/login/ ()({email,password})</nodeName>
+									<method>POST</method>
+									<param></param>
+									<attack></attack>
+									<evidence>text/html</evidence>
+									<otherinfo></otherinfo>
+								</instance>
+							
+						</instances>
+						<count>6</count>
+						<systemic>false</systemic>
+						<solution></solution>
+						<otherinfo></otherinfo>
+						<reference></reference>
+						<cweid>-1</cweid>
+						<wascid>-1</wascid>
+						<sourceid>35</sourceid>
+					</alertitem>
+				
+				
+					<alertitem>
+						<pluginid>100000</pluginid>
+						<alertRef>100000</alertRef>
+						<alert>A Client Error response code was returned by the server</alert>
+						<name>A Client Error response code was returned by the server</name>
+						<riskcode>0</riskcode>
+						<confidence>3</confidence>
+						<riskdesc>Informational (High)</riskdesc>
+						<confidencedesc>High</confidencedesc>
+						<desc>&lt;p&gt;A response code of 401 was returned by the server.&lt;/p&gt;&lt;p&gt;This may indicate that the application is failing to handle unexpected input correctly.&lt;/p&gt;&lt;p&gt;Raised by the &apos;Alert on HTTP Response Code Error&apos; script&lt;/p&gt;</desc>
+						<instances>
+							
+								<instance>
+									<uri>https://saftladen.automatisier.bar/api/BasketItems/%7B%7B_%5B&apos;_product_1_basket_id&apos;%5D%7D%7D</uri>
+									<nodeName>https://saftladen.automatisier.bar/api/BasketItems/{{_[&apos;_product_1_basket_id&apos;]}}</nodeName>
+									<method>DELETE</method>
+									<param></param>
+									<attack></attack>
+									<evidence>401</evidence>
+									<otherinfo></otherinfo>
+								</instance>
+							
+							
+								<instance>
+									<uri>https://saftladen.automatisier.bar/api/BasketItems/%7B%7B_%5B&apos;_product_1_basket_id&apos;%5D%7D%7D/</uri>
+									<nodeName>https://saftladen.automatisier.bar/api/BasketItems/{{_[&apos;_product_1_basket_id&apos;]}}/</nodeName>
+									<method>DELETE</method>
+									<param></param>
+									<attack></attack>
+									<evidence>401</evidence>
+									<otherinfo></otherinfo>
+								</instance>
+							
+							
+								<instance>
+									<uri>https://saftladen.automatisier.bar/api/BasketItems</uri>
+									<nodeName>https://saftladen.automatisier.bar/api/BasketItems</nodeName>
+									<method>GET</method>
+									<param></param>
+									<attack></attack>
+									<evidence>401</evidence>
+									<otherinfo></otherinfo>
+								</instance>
+							
+							
+								<instance>
+									<uri>https://saftladen.automatisier.bar/api/BasketItems/</uri>
+									<nodeName>https://saftladen.automatisier.bar/api/BasketItems/</nodeName>
+									<method>GET</method>
+									<param></param>
+									<attack></attack>
+									<evidence>401</evidence>
+									<otherinfo></otherinfo>
+								</instance>
+							
+							
+								<instance>
+									<uri>https://saftladen.automatisier.bar/api/BasketItems/1436118844515449286</uri>
+									<nodeName>https://saftladen.automatisier.bar/api/BasketItems/1436118844515449286</nodeName>
+									<method>GET</method>
+									<param></param>
+									<attack></attack>
+									<evidence>401</evidence>
+									<otherinfo></otherinfo>
+								</instance>
+							
+							
+								<instance>
+									<uri>https://saftladen.automatisier.bar/api/BasketItems/actuator/health</uri>
+									<nodeName>https://saftladen.automatisier.bar/api/BasketItems/actuator/health</nodeName>
+									<method>GET</method>
+									<param></param>
+									<attack></attack>
+									<evidence>401</evidence>
+									<otherinfo></otherinfo>
+								</instance>
+							
+							
+								<instance>
+									<uri>https://saftladen.automatisier.bar/api/Users</uri>
+									<nodeName>https://saftladen.automatisier.bar/api/Users</nodeName>
+									<method>GET</method>
+									<param></param>
+									<attack></attack>
+									<evidence>401</evidence>
+									<otherinfo></otherinfo>
+								</instance>
+							
+							
+								<instance>
+									<uri>https://saftladen.automatisier.bar/api/Users/</uri>
+									<nodeName>https://saftladen.automatisier.bar/api/Users/</nodeName>
+									<method>GET</method>
+									<param></param>
+									<attack></attack>
+									<evidence>401</evidence>
+									<otherinfo></otherinfo>
+								</instance>
+							
+							
+								<instance>
+									<uri>https://saftladen.automatisier.bar/api/Users/323100652627531624</uri>
+									<nodeName>https://saftladen.automatisier.bar/api/Users/323100652627531624</nodeName>
+									<method>GET</method>
+									<param></param>
+									<attack></attack>
+									<evidence>401</evidence>
+									<otherinfo></otherinfo>
+								</instance>
+							
+							
+								<instance>
+									<uri>https://saftladen.automatisier.bar/rest/basket</uri>
+									<nodeName>https://saftladen.automatisier.bar/rest/basket</nodeName>
+									<method>GET</method>
+									<param></param>
+									<attack></attack>
+									<evidence>401</evidence>
+									<otherinfo></otherinfo>
+								</instance>
+							
+							
+								<instance>
+									<uri>https://saftladen.automatisier.bar/rest/basket/</uri>
+									<nodeName>https://saftladen.automatisier.bar/rest/basket/</nodeName>
+									<method>GET</method>
+									<param></param>
+									<attack></attack>
+									<evidence>401</evidence>
+									<otherinfo></otherinfo>
+								</instance>
+							
+							
+								<instance>
+									<uri>https://saftladen.automatisier.bar/rest/basket/5897475761913764170</uri>
+									<nodeName>https://saftladen.automatisier.bar/rest/basket/5897475761913764170</nodeName>
+									<method>GET</method>
+									<param></param>
+									<attack></attack>
+									<evidence>401</evidence>
+									<otherinfo></otherinfo>
+								</instance>
+							
+							
+								<instance>
+									<uri>https://saftladen.automatisier.bar/rest/basket/%7B%7B_%5B&apos;_bid&apos;%5D%7D%7D</uri>
+									<nodeName>https://saftladen.automatisier.bar/rest/basket/{{_[&apos;_bid&apos;]}}</nodeName>
+									<method>GET</method>
+									<param></param>
+									<attack></attack>
+									<evidence>401</evidence>
+									<otherinfo></otherinfo>
+								</instance>
+							
+							
+								<instance>
+									<uri>https://saftladen.automatisier.bar/rest/basket/%7B%7B_%5B&apos;_bid&apos;%5D%7D%7D/</uri>
+									<nodeName>https://saftladen.automatisier.bar/rest/basket/{{_[&apos;_bid&apos;]}}/</nodeName>
+									<method>GET</method>
+									<param></param>
+									<attack></attack>
+									<evidence>401</evidence>
+									<otherinfo></otherinfo>
+								</instance>
+							
+							
+								<instance>
+									<uri>https://saftladen.automatisier.bar/api/BasketItems/</uri>
+									<nodeName>https://saftladen.automatisier.bar/api/BasketItems/ ()({id,ProductId,BasketId,quantity})</nodeName>
+									<method>POST</method>
+									<param></param>
+									<attack></attack>
+									<evidence>401</evidence>
+									<otherinfo></otherinfo>
+								</instance>
+							
+							
+								<instance>
+									<uri>https://saftladen.automatisier.bar/api/Users/</uri>
+									<nodeName>https://saftladen.automatisier.bar/api/Users/ ()({id,email,password,securityQuestion:{id,question},securityAnswer})</nodeName>
+									<method>POST</method>
+									<param></param>
+									<attack></attack>
+									<evidence>400</evidence>
+									<otherinfo></otherinfo>
+								</instance>
+							
+							
+								<instance>
+									<uri>https://saftladen.automatisier.bar/rest/user/login</uri>
+									<nodeName>https://saftladen.automatisier.bar/rest/user/login ()({email,password})</nodeName>
+									<method>POST</method>
+									<param></param>
+									<attack></attack>
+									<evidence>401</evidence>
+									<otherinfo></otherinfo>
+								</instance>
+							
+							
+								<instance>
+									<uri>https://saftladen.automatisier.bar/rest/user/login/</uri>
+									<nodeName>https://saftladen.automatisier.bar/rest/user/login/ ()({email,password})</nodeName>
+									<method>POST</method>
+									<param></param>
+									<attack></attack>
+									<evidence>401</evidence>
+									<otherinfo></otherinfo>
+								</instance>
+							
+						</instances>
+						<count>18</count>
+						<systemic>false</systemic>
+						<solution></solution>
+						<otherinfo></otherinfo>
+						<reference></reference>
+						<cweid>388</cweid>
+						<wascid>20</wascid>
+						<sourceid>14</sourceid>
+					</alertitem>
+				
+				
+					<alertitem>
+						<pluginid>10111</pluginid>
+						<alertRef>10111</alertRef>
+						<alert>Authentication Request Identified</alert>
+						<name>Authentication Request Identified</name>
+						<riskcode>0</riskcode>
+						<confidence>1</confidence>
+						<riskdesc>Informational (Low)</riskdesc>
+						<confidencedesc>Low</confidencedesc>
+						<desc>&lt;p&gt;The given request has been identified as an authentication request. The &apos;Other Info&apos; field contains a set of key=value lines which identify any relevant fields. If the request is in a context which has an Authentication Method set to &quot;Auto-Detect&quot; then this rule will change the authentication to match the request identified.&lt;/p&gt;</desc>
+						<instances>
+							
+								<instance>
+									<uri>https://saftladen.automatisier.bar/api/Users/</uri>
+									<nodeName>https://saftladen.automatisier.bar/api/Users/ ()({id,email,password,securityQuestion:{id,question},securityAnswer})</nodeName>
+									<method>POST</method>
+									<param>email</param>
+									<attack></attack>
+									<evidence>password</evidence>
+									<otherinfo>userParam=email
+userValue=zaproxy@example.com
+passwordParam=password</otherinfo>
+								</instance>
+							
+							
+								<instance>
+									<uri>https://saftladen.automatisier.bar/rest/user/login</uri>
+									<nodeName>https://saftladen.automatisier.bar/rest/user/login ()({email,password})</nodeName>
+									<method>POST</method>
+									<param>email</param>
+									<attack></attack>
+									<evidence>password</evidence>
+									<otherinfo>userParam=email
+userValue=zaproxy@example.com
+passwordParam=password</otherinfo>
+								</instance>
+							
+						</instances>
+						<count>2</count>
+						<systemic>false</systemic>
+						<solution>&lt;p&gt;This is an informational alert rather than a vulnerability and so there is nothing to fix.&lt;/p&gt;</solution>
+						<otherinfo>&lt;p&gt;userParam=email&lt;/p&gt;&lt;p&gt;userValue=zaproxy@example.com&lt;/p&gt;&lt;p&gt;passwordParam=password&lt;/p&gt;</otherinfo>
+						<reference>&lt;p&gt;https://www.zaproxy.org/docs/desktop/addons/authentication-helper/auth-req-id/&lt;/p&gt;</reference>
+						<cweid>-1</cweid>
+						<wascid>-1</wascid>
+						<sourceid>1</sourceid>
+					</alertitem>
+				
+				
+					<alertitem>
+						<pluginid>10049</pluginid>
+						<alertRef>10049-1</alertRef>
+						<alert>Non-Storable Content</alert>
+						<name>Non-Storable Content</name>
+						<riskcode>0</riskcode>
+						<confidence>2</confidence>
+						<riskdesc>Informational (Medium)</riskdesc>
+						<confidencedesc>Medium</confidencedesc>
+						<desc>&lt;p&gt;The response contents are not storable by caching components such as proxy servers. If the response does not contain sensitive, personal or user-specific information, it may benefit from being stored and cached, to improve performance.&lt;/p&gt;</desc>
+						<instances>
+							
+								<instance>
+									<uri>https://saftladen.automatisier.bar/api/BasketItems/%7B%7B_%5B&apos;_product_1_basket_id&apos;%5D%7D%7D</uri>
+									<nodeName>https://saftladen.automatisier.bar/api/BasketItems/{{_[&apos;_product_1_basket_id&apos;]}}</nodeName>
+									<method>DELETE</method>
+									<param></param>
+									<attack></attack>
+									<evidence>DELETE </evidence>
+									<otherinfo></otherinfo>
+								</instance>
+							
+							
+								<instance>
+									<uri>https://saftladen.automatisier.bar/rest/basket/%7B%7B_%5B&apos;_bid&apos;%5D%7D%7D</uri>
+									<nodeName>https://saftladen.automatisier.bar/rest/basket/{{_[&apos;_bid&apos;]}}</nodeName>
+									<method>GET</method>
+									<param></param>
+									<attack></attack>
+									<evidence>401</evidence>
+									<otherinfo></otherinfo>
+								</instance>
+							
+							
+								<instance>
+									<uri>https://saftladen.automatisier.bar/api/BasketItems/</uri>
+									<nodeName>https://saftladen.automatisier.bar/api/BasketItems/ ()({id,ProductId,BasketId,quantity})</nodeName>
+									<method>POST</method>
+									<param></param>
+									<attack></attack>
+									<evidence>401</evidence>
+									<otherinfo></otherinfo>
+								</instance>
+							
+							
+								<instance>
+									<uri>https://saftladen.automatisier.bar/api/Users/</uri>
+									<nodeName>https://saftladen.automatisier.bar/api/Users/ ()({id,email,password,securityQuestion:{id,question},securityAnswer})</nodeName>
+									<method>POST</method>
+									<param></param>
+									<attack></attack>
+									<evidence>400</evidence>
+									<otherinfo></otherinfo>
+								</instance>
+							
+							
+								<instance>
+									<uri>https://saftladen.automatisier.bar/rest/user/login</uri>
+									<nodeName>https://saftladen.automatisier.bar/rest/user/login ()({email,password})</nodeName>
+									<method>POST</method>
+									<param></param>
+									<attack></attack>
+									<evidence>401</evidence>
+									<otherinfo></otherinfo>
+								</instance>
+							
+						</instances>
+						<count>5</count>
+						<systemic>true</systemic>
+						<solution>&lt;p&gt;The content may be marked as storable by ensuring that the following conditions are satisfied:&lt;/p&gt;&lt;p&gt;The request method must be understood by the cache and defined as being cacheable (&quot;GET&quot;, &quot;HEAD&quot;, and &quot;POST&quot; are currently defined as cacheable)&lt;/p&gt;&lt;p&gt;The response status code must be understood by the cache (one of the 1XX, 2XX, 3XX, 4XX, or 5XX response classes are generally understood)&lt;/p&gt;&lt;p&gt;The &quot;no-store&quot; cache directive must not appear in the request or response header fields&lt;/p&gt;&lt;p&gt;For caching by &quot;shared&quot; caches such as &quot;proxy&quot; caches, the &quot;private&quot; response directive must not appear in the response&lt;/p&gt;&lt;p&gt;For caching by &quot;shared&quot; caches such as &quot;proxy&quot; caches, the &quot;Authorization&quot; header field must not appear in the request, unless the response explicitly allows it (using one of the &quot;must-revalidate&quot;, &quot;public&quot;, or &quot;s-maxage&quot; Cache-Control response directives)&lt;/p&gt;&lt;p&gt;In addition to the conditions above, at least one of the following conditions must also be satisfied by the response:&lt;/p&gt;&lt;p&gt;It must contain an &quot;Expires&quot; header field&lt;/p&gt;&lt;p&gt;It must contain a &quot;max-age&quot; response directive&lt;/p&gt;&lt;p&gt;For &quot;shared&quot; caches such as &quot;proxy&quot; caches, it must contain a &quot;s-maxage&quot; response directive&lt;/p&gt;&lt;p&gt;It must contain a &quot;Cache Control Extension&quot; that allows it to be cached&lt;/p&gt;&lt;p&gt;It must have a status code that is defined as cacheable by default (200, 203, 204, 206, 300, 301, 404, 405, 410, 414, 501).&lt;/p&gt;</solution>
+						<otherinfo></otherinfo>
+						<reference>&lt;p&gt;https://datatracker.ietf.org/doc/html/rfc7234&lt;/p&gt;&lt;p&gt;https://datatracker.ietf.org/doc/html/rfc7231&lt;/p&gt;&lt;p&gt;https://www.w3.org/Protocols/rfc2616/rfc2616-sec13.html&lt;/p&gt;</reference>
+						<cweid>524</cweid>
+						<wascid>13</wascid>
+						<sourceid>14</sourceid>
+					</alertitem>
+				
+				
+					<alertitem>
+						<pluginid>10015</pluginid>
+						<alertRef>10015</alertRef>
+						<alert>Re-examine Cache-control Directives</alert>
+						<name>Re-examine Cache-control Directives</name>
+						<riskcode>0</riskcode>
+						<confidence>1</confidence>
+						<riskdesc>Informational (Low)</riskdesc>
+						<confidencedesc>Low</confidencedesc>
+						<desc>&lt;p&gt;The cache-control header has not been set properly or is missing, allowing the browser and proxies to cache content. For static assets like css, js, or image files this might be intended, however, the resources should be reviewed to ensure that no sensitive content will be cached.&lt;/p&gt;</desc>
+						<instances>
+							
+								<instance>
+									<uri>https://saftladen.automatisier.bar/rest/products/search?q=q</uri>
+									<nodeName>https://saftladen.automatisier.bar/rest/products/search (q)</nodeName>
+									<method>GET</method>
+									<param>cache-control</param>
+									<attack></attack>
+									<evidence></evidence>
+									<otherinfo></otherinfo>
+								</instance>
+							
+						</instances>
+						<count>1</count>
+						<systemic>true</systemic>
+						<solution>&lt;p&gt;For secure content, ensure the cache-control HTTP header is set with &quot;no-cache, no-store, must-revalidate&quot;. If an asset should be cached consider setting the directives &quot;public, max-age, immutable&quot;.&lt;/p&gt;</solution>
+						<otherinfo></otherinfo>
+						<reference>&lt;p&gt;https://cheatsheetseries.owasp.org/cheatsheets/Session_Management_Cheat_Sheet.html#web-content-caching&lt;/p&gt;&lt;p&gt;https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Headers/Cache-Control&lt;/p&gt;&lt;p&gt;https://grayduck.mn/2021/09/13/cache-control-recommendations/&lt;/p&gt;</reference>
+						<cweid>525</cweid>
+						<wascid>13</wascid>
+						<sourceid>8</sourceid>
+					</alertitem>
+				
+				
+					<alertitem>
+						<pluginid>10049</pluginid>
+						<alertRef>10049-3</alertRef>
+						<alert>Storable and Cacheable Content</alert>
+						<name>Storable and Cacheable Content</name>
+						<riskcode>0</riskcode>
+						<confidence>2</confidence>
+						<riskdesc>Informational (Medium)</riskdesc>
+						<confidencedesc>Medium</confidencedesc>
+						<desc>&lt;p&gt;The response contents are storable by caching components such as proxy servers, and may be retrieved directly from the cache, rather than from the origin server by the caching servers, in response to similar requests from other users. If the response data is sensitive, personal or user-specific, this may result in sensitive information being leaked. In some cases, this may even result in a user gaining complete control of the session of another user, depending on the configuration of the caching components in use in their environment. This is primarily an issue where &quot;shared&quot; caching servers such as &quot;proxy&quot; caches are configured on the local network. This configuration is typically found in corporate or educational environments, for instance.&lt;/p&gt;</desc>
+						<instances>
+							
+								<instance>
+									<uri>https://saftladen.automatisier.bar/rest/products/search?q=q</uri>
+									<nodeName>https://saftladen.automatisier.bar/rest/products/search (q)</nodeName>
+									<method>GET</method>
+									<param></param>
+									<attack></attack>
+									<evidence></evidence>
+									<otherinfo>In the absence of an explicitly specified caching lifetime directive in the response, a liberal lifetime heuristic of 1 year was assumed. This is permitted by rfc7234.</otherinfo>
+								</instance>
+							
+						</instances>
+						<count>1</count>
+						<systemic>true</systemic>
+						<solution>&lt;p&gt;Validate that the response does not contain sensitive, personal or user-specific information. If it does, consider the use of the following HTTP response headers, to limit, or prevent the content being stored and retrieved from the cache by another user:&lt;/p&gt;&lt;p&gt;Cache-Control: no-cache, no-store, must-revalidate, private&lt;/p&gt;&lt;p&gt;Pragma: no-cache&lt;/p&gt;&lt;p&gt;Expires: 0&lt;/p&gt;&lt;p&gt;This configuration directs both HTTP 1.0 and HTTP 1.1 compliant caching servers to not store the response, and to not retrieve the response (without validation) from the cache, in response to a similar request.&lt;/p&gt;</solution>
+						<otherinfo>&lt;p&gt;In the absence of an explicitly specified caching lifetime directive in the response, a liberal lifetime heuristic of 1 year was assumed. This is permitted by rfc7234.&lt;/p&gt;</otherinfo>
+						<reference>&lt;p&gt;https://datatracker.ietf.org/doc/html/rfc7234&lt;/p&gt;&lt;p&gt;https://datatracker.ietf.org/doc/html/rfc7231&lt;/p&gt;&lt;p&gt;https://www.w3.org/Protocols/rfc2616/rfc2616-sec13.html&lt;/p&gt;</reference>
+						<cweid>524</cweid>
+						<wascid>13</wascid>
+						<sourceid>8</sourceid>
+					</alertitem>
+				
+			</alerts>
+		</site>
+	
+</OWASPZAPReport>
